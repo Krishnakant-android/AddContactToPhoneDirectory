@@ -1,9 +1,13 @@
 package com.krishna.addcontacttophonedirectory;
 
+import android.Manifest;
 import android.content.ContentProviderOperation;
 import android.content.OperationApplicationException;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.RemoteException;
 import android.provider.ContactsContract;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -22,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
         buttonSaveContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                writeContact("Krishna", "9975885744");
                 writeContact("Guru", "9975885644");
                 writeContact("Kai", "9975885740");
                 writeContact("Bande", "9975885794");
@@ -32,6 +35,13 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                checkUserPermission();
+            }
+        }
 
 
     }
@@ -57,4 +67,19 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    private void checkUserPermission() {
+        ActivityCompat.requestPermissions(MainActivity.this,
+                new String[]{
+                        Manifest.permission.GET_ACCOUNTS,
+                        Manifest.permission.READ_CONTACTS,
+                        Manifest.permission.WRITE_CONTACTS,
+                },
+                1);
+    }
+
+
+
 }
+
+
